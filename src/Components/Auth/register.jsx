@@ -22,7 +22,7 @@ function Register() {
                         JSON.stringify(response.data.data)
                     );
                     toast(response.data.message);
-                    window.location = '/admin/user';                }
+                    window.location = '/admin';                }
             }
             
         })

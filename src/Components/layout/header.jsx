@@ -1,10 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link } from "react-router-dom";
 
 import { ToastContainer, toast } from 'react-toastify';
 
 function Header() {
+
+     const [checkUser, SetCheckUser] = useState('');
+
+    useEffect(()=>{
+        SetCheckUser('');
+        let user =  JSON.parse(localStorage.getItem('user'));
+        SetCheckUser(user);
+
+    },[]);
+
+    
 
 
     return (
@@ -20,12 +31,15 @@ function Header() {
                         <li className="nav-item active">
                             <Link to="/" className="nav-link"> <span>Dashboard</span></Link>
                         </li>
+                        {checkUser.role == "user" || checkUser.role == "admin"  ? ( 
+
                         <li className="nav-item">
                             <Link to="/user" className="nav-link"> <span>User</span></Link>
-                        </li>
+                        </li> ) : '' }
+                        {checkUser.role == "admin" ? ( 
                         <li className="nav-item">
                             <Link to="/organization" className="nav-link"> <span>Organization</span></Link>
-                        </li>
+                        </li> ) : ''}
                         <li className="nav-item dropdown">
                             <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Profile

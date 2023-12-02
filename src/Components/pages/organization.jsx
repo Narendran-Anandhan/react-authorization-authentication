@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import {  Form, Button, Modal } from 'react-bootstrap';
-import api from "./../../../Environment";
+import api from "./../../Environment";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function Dashboard() {
+function Organization() {
 
     const [userList, setUserList] = useState([]);
     const [addUser, SetAddUser] = useState(false);
@@ -191,4 +191,4 @@ console.log(error);
         </>
     );
 }
-export default Dashboard;
+export default Organization;
