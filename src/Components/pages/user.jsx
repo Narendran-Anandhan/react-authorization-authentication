@@ -14,6 +14,14 @@ function User() {
     const [pagination, setPagination] = useState(true)
     const [totalPages, setTotalPages] = useState(0);
     const [userId, setUserId] = useState("");
+    const [checkUser, SetCheckUser] = useState('');
+
+    useEffect(()=>{
+        SetCheckUser('');
+        let user =  JSON.parse(localStorage.getItem('user'));
+        SetCheckUser(user);
+
+    },[]);
 
     useEffect(() => {
         api.getMethod("/api/user?page=" + currentPage + "&limit=" + limit)
@@ -121,8 +129,8 @@ console.log(error);
         <>
             <ToastContainer />
             <div className="App p-4">
-                <Button variant="success" onClick={handleAddUser}>
-                    Add New User      </Button>
+             {checkUser.role == 'admin'  ?  <Button variant="success" onClick={handleAddUser}>
+                    Add New User      </Button> : '' }
                 <Modal show={addUser} onHide={handleCloseUser}>
                     <Modal.Header closeButton>
                         <Modal.Title>Add New User</Modal.Title>
@@ -153,7 +161,8 @@ console.log(error);
                                         <th>#</th>
                                         <th>Name</th>
                                         <th>Email</th>
-                                        <th>Action</th>
+                                        {checkUser.role == "admin" ? 
+                                        <th>Action</th> : ''}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -163,8 +172,12 @@ console.log(error);
                                             <td>{data.username}</td>
                                             <td>{data.email}</td>
                                             <td> 
+                                                {checkUser.role == "admin" ? (
+                                                    <div>
                                                 <button type="button" className='btn btn-primary mr-3' onClick={(event) => handleEditList(data._id, data)}>Edit</button>
                                                 <button type="button" className='btn btn-danger' onClick={() => removeList(data._id,data.index)}>Delete</button>
+                                              </div>
+                                                ): ''}
                                             </td>
                                         </tr>
                                     ))}

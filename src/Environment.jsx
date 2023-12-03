@@ -10,12 +10,13 @@ let headers = {
         "X-Requested-With":"XMLHttpRequest"
     }
 };
+let user =  JSON.parse(localStorage.getItem('user'));
 
 let accessToken =
-    localStorage.getItem("accessToken") !== "" &&
-    localStorage.getItem("accessToken") !== null &&
-    localStorage.getItem("accessToken") !== undefined
-    ? localStorage.getItem("accessToken")
+    user.token !== "" &&
+    user.token !== null &&
+    user.token !== undefined
+    ? user.token
     : "";
 
 if (accessToken !== '') {
