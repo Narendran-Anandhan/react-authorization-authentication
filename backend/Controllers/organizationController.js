@@ -1,6 +1,6 @@
 mongoose = require('mongoose');
 
-const Organization = require("../Model/organization");
+const Organization = require("../Models/organization");
 
 exports.createOrganization = async (req, res) => {
     const org = new Organization({

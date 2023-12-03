@@ -9,11 +9,11 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
-const {register,login} = require("../Controllers/Api/ApiController");
+const {register,login} = require("../Controllers/authController");
 
-const {createUser,getUser,updateUser,deleteUser} = require("../Controller/userController");
+const {createUser,getUser,updateUser,deleteUser} = require("../Controllers/userController");
 
-const {createOrganization,getOrganization,updateOrganization,deleteOrganization} = require("../Controller/userOrganization");
+const {createOrganization,getOrganization,updateOrganization,deleteOrganization} = require("../Controllers/organizationController");
 
 //Authentication
 router.post('/register', validation(schemas.user),  register); 

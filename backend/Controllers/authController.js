@@ -1,22 +1,22 @@
 mongoose = require('mongoose');
 const jwt = require("jsonwebtoken");
 
-const User = require("../../Models/user");
+const User = require("../Models/user");
 const fs = require('fs');
 
 const { createError }  = require("http-errors");
-const { GeneratePassword, GenerateToken, ComparePassword, ValidatePassword } = require("../../helper/jwt");
+const { GeneratePassword, GenerateToken, ComparePassword, ValidatePassword } = require("../helper/jwt");
 
 exports.register = async (req, res) => {
   try {
    console.log(req.body);
    // Get user input
-   const { email, password } = req.body;
+   const { email, password,role } = req.body;
    // Validate user input
-   if (!(email && password)) {
+   if (!(email && password && role)) {
      res.status(400).json({
       status:400,
-      message:"email and password is required"});
+      message:"email and password, role is required"});
    }
     else {
       var checkEmail = await User.findOne({ email: email });
@@ -32,23 +32,24 @@ exports.register = async (req, res) => {
         const user = new User({
           email: email.toLowerCase(), // sanitize: convert email to lowercase
           password: encrytedPassword,
+          role:role.toLowerCase(),
+          username: req.body.username
         });
 
         let data = {
           email: email.toLowerCase(),
-          password: encrytedPassword
+          password: encrytedPassword,
+          role:role.toLowerCase()
         };
 
         const token = await GenerateToken(data)
         // save user token
         user.token = token;
-        user.username = req.body.username;
-        user.role = req.body.role;
 
         if (token) {
           await user.save();
           res.status(201).json({
-            data: user,
+            data: {...user._doc, password:null},
             status: 201,
             message: "User Registerd Successfully !!",
           });
@@ -86,7 +87,7 @@ exports.login = async (req, res) => {
   // Validate if user exist in our database
  const user = await User.findOne({ email });
 console.log(user);
-  const data = { email: email, password: password }
+  const data = { email: email, password: password, role:user.role  }
   try {
    if (user && (await ComparePassword(password, user.password))) {
    
@@ -99,7 +100,7 @@ console.log(user);
         user.save();
         // user
         res.status(200).json({
-          data: user,
+          data: {...user._doc, password:null},
           message: 'Login successfully!',
           status: 201
         });
