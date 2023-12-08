@@ -4,6 +4,12 @@ const schemas = {
     username: Joi.string().required(),
     email: Joi.string().required(),
 
+  }),
+  organization: Joi.object().keys({ 
+    name: Joi.string().required(),
+    email: Joi.string().required(),
+    address: Joi.string().required(),
+
   }) 
 }; 
 module.exports = schemas;

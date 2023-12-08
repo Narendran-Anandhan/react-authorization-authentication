@@ -108,14 +108,14 @@ console.log(user);
      
     }else{
       res.status(401).json({
-        error: "Invalid Credentials",
+        message: "Invalid Credentials",
         status: 401
       });
     }
   } catch (error) {
     console.log(error);
     res.status(500).json({
-      error: "Something went wrong",
+      message: "Something went wrong",
       status: 500
     });
   }

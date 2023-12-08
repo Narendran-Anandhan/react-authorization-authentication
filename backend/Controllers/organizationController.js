@@ -16,6 +16,17 @@ exports.createOrganization = async (req, res) => {
             message: "Create successfully",
         });
     } catch (error) {
+        if (error.name === "ValidationError") {
+            let errors = {};
+      
+            Object.keys(error.errors).forEach((key) => {
+              errors[key] = error.errors[key].message;
+            });
+            res.status(400).send({
+                status: 400,
+                message: errors,
+            });
+          }
         res.status(500).send({
             status: 500,
             message: `Something wen't wrong`,
@@ -88,6 +99,15 @@ exports.updateOrganization = async (req, res) => {
             message: "Update successfully",
         });
     } catch (error) {
+        if (error.name === "ValidationError") {
+            let errors = {};
+      
+            Object.keys(error.errors).forEach((key) => {
+              errors[key] = error.errors[key].message;
+            });
+      
+            return res.status(400).send(errors);
+          }
         res.status(500).send({
             status: 500,
             message: `Something wen't wrong`,

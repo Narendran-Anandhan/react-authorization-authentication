@@ -86,7 +86,18 @@ function Organization() {
                 }
             })
             .catch(error => {
-                toast(error.data.message);
+              //  toast(error.data.message);
+              console.log(error.response.data);
+
+              if(error.response.data.message){
+                  toast(error.response.data.message);
+
+              }else{
+                  Object.values(error.response.data).forEach((err) => {
+                      toast(err);
+                    });
+
+              }
             });
         }else{
             api.postMethod("/api/organization", org)
@@ -102,8 +113,19 @@ function Organization() {
                 }
             })
             .catch(error => {
-console.log(error);
-                toast(error.response.data.message);
+                //     console.log(error);
+                // toast(error.response.data.message);
+                console.log(error.response.data);
+
+                if(error.response.data.message){
+                    toast(error.response.data.message);
+
+                }else{
+                    Object.values(error.response.data).forEach((err) => {
+                        toast(err);
+                      });
+
+                }
             });
         }
     };

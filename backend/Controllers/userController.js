@@ -72,8 +72,7 @@ exports.getUser = async (req, res) => {
 
 
 exports.updateUser = async (req, res) => {
-    const id = req.params.userId;
-    try {
+  
         const id = req.params.userId;
         const username = req.body.username;
         const email = req.body.email;
@@ -86,15 +85,22 @@ exports.updateUser = async (req, res) => {
                 message: `user not found with id ${id}`,
             });
         }
-        if (username) {
+        if (username !== '' || email !== '' && role !== '' ) {
+            return res.status(500).send({
+                status: 500,
+                message: `Empty value not allowed`,
+            });
+        }
+        if (username !== "") {
             user.username = username;
         }
-        if (email) {
+        if (email  !== "") {
             user.email = email;
         }
-        if (role) {
+        if (role  !== "") {
             user.role = role;
         }
+        try {
         user.save();
         res.status(200).send({
             status: 200,
@@ -102,6 +108,15 @@ exports.updateUser = async (req, res) => {
             message: "Update successfully",
         });
     } catch (error) {
+        if (error.name === "ValidationError") {
+            let errors = {};
+      
+            Object.keys(error.errors).forEach((key) => {
+              errors[key] = error.errors[key].message;
+            });
+      
+            return res.status(400).send(errors);
+          }
         res.status(500).send({
             status: 500,
             message: `Something wen't wrong`,

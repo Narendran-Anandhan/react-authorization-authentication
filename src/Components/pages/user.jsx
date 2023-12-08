@@ -89,10 +89,14 @@ function User() {
                 }
             })
             .catch(error => {
-                if(error.data){
-                    toast(error.data.message);
+                console.log(error);
+                if(error.response.data.message){
+                    toast(error.response.data.message);
+                
                 }else{
-                    toast(error.data.message);
+                    Object.values(error.response.data).forEach((err) => {
+                        toast(err);
+                      });
 
                 }
             });
