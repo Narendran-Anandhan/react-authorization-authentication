@@ -22,7 +22,13 @@ function Register() {
                         JSON.stringify(response.data.data)
                     );
                     toast(response.data.message);
-                    window.location = '/admin';                }
+                    let user =  JSON.parse(localStorage.getItem('user'));
+                    if(user.role == 'admin'){
+                        window.location = '/admin';    
+                    }else{
+                        window.location = '/user';
+                    }
+                            }
             }
             
         })

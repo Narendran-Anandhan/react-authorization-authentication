@@ -4,7 +4,6 @@ import Nav from "../Components/layout/header";
 import User from "../Components/pages/user";
 import Organization from "../Components/pages/organization";
 import Dashboard from "../Components/pages/dashboard";
-import ProtectedUserRoute from "../Helper/protectedUserRoute";
 import ProtectedOrgRoute from "../Helper/protectedOrgRoute"
 
 function App() {
@@ -12,11 +11,11 @@ function App() {
         <div>
             <Nav />
             <Routes>
-                <Route exact path="/" element={<ProtectedUserRoute />}>
+                <Route exact path="/" element={<ProtectedOrgRoute />}>
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/userlist" element={<User />} />
+                    <Route path="/organization" element={<Organization />} />
                 </Route>
-
 
             </Routes>
         </div>

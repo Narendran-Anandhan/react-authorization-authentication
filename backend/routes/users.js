@@ -21,7 +21,7 @@ router.post('/register', validation(schemas.user),  register);
 router.post('/login', validation(schemas.user),  login); 
 
 //user
-router.post('/user', validation(schemas.user), verifyToken, createUser); 
+router.post('/user', verifyToken, createUser); 
 
 router.get("/user",verifyToken, getUser);
 
@@ -30,7 +30,7 @@ router.put("/user/:userId",verifyToken, updateUser);
 router.delete("/user/:userId",verifyToken, deleteUser);
 
 //organization
-router.post('/organization', validation(schemas.organization),verifyToken,  createOrganization); 
+router.post('/organization',verifyToken,  createOrganization); 
 
 router.get("/organization",verifyToken, getOrganization);
 

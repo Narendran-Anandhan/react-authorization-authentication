@@ -48,7 +48,7 @@ function Header() {
                         {checkUser ? (checkUser.role == "user" || checkUser.role == "admin"  ? ( 
 
                         <li className="nav-item">
-                            <Link to="/user" className="nav-link"> <span>User</span></Link>
+                            <Link to="/userlist" className="nav-link"> <span>User</span></Link>
                         </li> ) : '') : '' }
                         { checkUser ? (checkUser.role == "admin" ? ( 
                         <li className="nav-item">

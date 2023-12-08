@@ -58,9 +58,9 @@ exports.getOrganization = async (req, res) => {
 
 
 exports.updateOrganization = async (req, res) => {
-    const id = req.params.userId;
+    const id = req.params.orgId;
     try {
-        const id = req.params.userId;
+        const id = req.params.orgId;
         const name = req.body.name;
         const email = req.body.email;
         const address = req.body.address;
@@ -96,7 +96,7 @@ exports.updateOrganization = async (req, res) => {
 };
 
 exports.deleteOrganization = async (req, res) => {
-    const id = req.params.userId;
+    const id = req.params.orgId;
     try {
         const org = await Organization.findByIdAndDelete(id);
         if (!org) {

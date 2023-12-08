@@ -72,6 +72,22 @@ const Environment = {
         }
         console.log(headers);
         return axios.get(url, headers, formData);
+    },
+    DeleteMethod: async (action, object) => {
+
+        const url = apiUrl + action + '/'+ object;
+
+        return await axios.delete(url,headers)
+    },
+
+
+    UpdateMethod: async (action,id, object) => {
+
+
+        const url = apiUrl + action + '/'+ id;
+
+
+        return await axios.put(url, object,headers)
     }
 };
 

@@ -89,7 +89,12 @@ function User() {
                 }
             })
             .catch(error => {
-                toast(error.data.message);
+                if(error.data){
+                    toast(error.data.message);
+                }else{
+                    toast(error.data.message);
+
+                }
             });
         }else{
             api.postMethod("/api/user", user)
@@ -105,8 +110,17 @@ function User() {
                 }
             })
             .catch(error => {
-console.log(error);
-                toast(error.response.data.message);
+                console.log(error.response.data);
+
+                if(error.response.data.message){
+                    toast(error.response.data.message);
+
+                }else{
+                    Object.values(error.response.data).forEach((err) => {
+                        toast(err);
+                      });
+
+                }
             });
         }
     };
@@ -150,6 +164,24 @@ console.log(error);
                         <Form.Group className="mb-3">
                             <Form.Label>Email</Form.Label>
                             <Form.Control type="email" name="email" id="email" value={user.email} onChange={(e) => handleChange(e)} placeholder=" Enter Email" />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control type="password" name="password" id="password" value={user.password} onChange={(e) => handleChange(e)} placeholder=" Enter Password" />
+                        </Form.Group>
+                        <Form.Group controlId="formBasicSelect">
+                            <Form.Label>Role</Form.Label>
+                            <Form.Control
+                            as="select"
+                            name="role"
+                            value={user.role}
+                            onChange={(e) => handleChange(e)}
+                            >
+                            <option value="">Select Role</option>
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                            </Form.Control>
                         </Form.Group>
                     </Modal.Body>
                     <Modal.Footer>

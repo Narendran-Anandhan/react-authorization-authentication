@@ -23,7 +23,13 @@ function Login() {
                         JSON.stringify(response.data.data)
                     );
                     toast(response.data.message);
-                    window.location = '/admin/user';
+                    let user =  JSON.parse(localStorage.getItem('user'));
+                    if(user.role == 'admin'){
+                        window.location = '/admin';    
+                    }else{
+                        window.location = '/user';
+                    }
+                    // window.location = '/admin/user';
                 }
             }
         })
