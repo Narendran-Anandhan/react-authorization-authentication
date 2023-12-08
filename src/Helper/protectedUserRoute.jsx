@@ -7,8 +7,12 @@ const  ProtectedUserRoute = () => {
     useEffect(()=>{
         setRole(false);
         let user =  JSON.parse(localStorage.getItem('user'));
-        setRole(user.role=="user"?true:false)
+       
+       
+       if(user){
 
+        setRole(user.role=="user"?true:false)
+       }
     },[]);
 
 

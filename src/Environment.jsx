@@ -12,12 +12,17 @@ let headers = {
 };
 let user =  JSON.parse(localStorage.getItem('user'));
 
-let accessToken =
+var accessToken = " ";
+if(user){
+     accessToken =
     user.token !== "" &&
     user.token !== null &&
     user.token !== undefined
     ? user.token
     : "";
+
+}
+
 
 if (accessToken !== '') {
     headers = {

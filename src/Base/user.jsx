@@ -20,7 +20,7 @@ function App() {
                 <Route exact path="/" element={<ProtectedOrgRoute />}>
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/user" element={<User />} />
-                    <Route path="/0rganization" element={<Organization />} />
+                    <Route path="/organization" element={<Organization />} />
                 </Route>
 
             </Routes>

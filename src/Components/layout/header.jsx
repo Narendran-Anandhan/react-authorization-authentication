@@ -3,17 +3,31 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Link } from "react-router-dom";
 
 import { ToastContainer, toast } from 'react-toastify';
+import { BrowserRouter as Router, Routes, Route, Outlet, Navigate } from 'react-router-dom';
 
 function Header() {
 
      const [checkUser, SetCheckUser] = useState('');
 
+   
     useEffect(()=>{
         SetCheckUser('');
         let user =  JSON.parse(localStorage.getItem('user'));
-        SetCheckUser(user);
+        if(user){
+            SetCheckUser(user);
+        }else{
+            window.location = '/';
+        }
 
     },[]);
+
+
+    const handleRemove=(e)=>{
+        localStorage.removeItem('user');
+        window.location = '/';
+
+
+    }
 
     
 
@@ -31,23 +45,17 @@ function Header() {
                         <li className="nav-item active">
                             <Link to="/" className="nav-link"> <span>Dashboard</span></Link>
                         </li>
-                        {checkUser.role == "user" || checkUser.role == "admin"  ? ( 
+                        {checkUser ? (checkUser.role == "user" || checkUser.role == "admin"  ? ( 
 
                         <li className="nav-item">
                             <Link to="/user" className="nav-link"> <span>User</span></Link>
-                        </li> ) : '' }
-                        {checkUser.role == "admin" ? ( 
+                        </li> ) : '') : '' }
+                        { checkUser ? (checkUser.role == "admin" ? ( 
                         <li className="nav-item">
                             <Link to="/organization" className="nav-link"> <span>Organization</span></Link>
-                        </li> ) : ''}
-                        <li className="nav-item dropdown">
-                            <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Profile
-                            </a>
-                            <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a className="dropdown-item" href="#">Logout</a>
-                                <div className="dropdown-divider"></div>
-                            </div>
+                        </li> ) : '') :''}
+                        <li className="nav-item">
+                            <Link onClick={(e) => handleRemove(e)} className="nav-link"> <span>LogOut</span></Link>
                         </li>
 
                     </ul>

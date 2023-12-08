@@ -6,37 +6,49 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function Organization() {
 
-    const [userList, setUserList] = useState([]);
-    const [addUser, SetAddUser] = useState(false);
+    const [orgList, setOrgList] = useState([]);
+    const [addOrg, SetAddOrg] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [limit, setLimit] = useState(3);
-    const [user, setUser] = useState({});
+    const [org, setOrg] = useState({});
     const [pagination, setPagination] = useState(true)
     const [totalPages, setTotalPages] = useState(0);
-    const [userId, setUserId] = useState("");
+    const [orgId, setOrgId] = useState("");
+    const [checkUser, SetCheckUser] = useState('');
+
+    useEffect(()=>{
+        SetCheckUser('');
+        let user =  JSON.parse(localStorage.getItem('user'));
+        if(user && user.role =="admin"){
+            SetCheckUser(user);
+        }else{
+            window.location = '/';
+        }
+
+    },[]);
 
     useEffect(() => {
-        // api.getMethod("/api/user?page=" + currentPage + "&limit=" + limit)
-        //     .then(response => {
-        //         if (response.data.status == 200) {
-        //             setTotalPages(response.data.count);
-        //             setUserList(response.data.data);
-        //         }
-        //     })
-        //     .catch(error => {
-        //         toast(error.data.message);
-        //     });
+        api.getMethod("/api/organization?page=" + currentPage + "&limit=" + limit)
+            .then(response => {
+                if (response.data.status == 200) {
+                    setTotalPages(response.data.count);
+                    setOrgList(response.data.data);
+                }
+            })
+            .catch(error => {
+                toast(error.data.message);
+            });
     }, [currentPage])
 
-    const handleAddUser = (event) => {
+    const handleAddOrg = (event) => {
         event.preventDefault();
-        SetAddUser(true);
+        SetAddOrg(true);
     };
 
-    const handleCloseUser = () => {
-        setUserId("");
-        setUser({});
-        SetAddUser(false);
+    const handleCloseOrg = () => {
+        setOrgId("");
+        setOrg({});
+        SetAddOrg(false);
     };
 
     const handleDecrement = (e) => {
@@ -54,36 +66,36 @@ function Organization() {
     const handleChange = (e) => {
         e.preventDefault();
         const { name, value } = e.currentTarget;
-        setUser({ ...user, [name]: value })
+        setOrg({ ...org, [name]: value })
     };
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        if(userId){
-            api.UpdateMethod("/api/user", userId,user)
+        if(orgId){
+            api.UpdateMethod("/api/organization", orgId,org)
             .then(response => {
                 if (response.data.status == 200) {
                     toast(response.data.message);
-                    const updatedList = userList.map((current) => {
-                        return current._id === userId ? user : current;
+                    const updatedList = orgList.map((current) => {
+                        return current._id === orgId ? org : current;
                       });
-                    setUserList([...updatedList]);
-                    SetAddUser(false);
-                    setUserId("");
-                    setUser({});
+                    setOrgList([...updatedList]);
+                    SetAddOrg(false);
+                    setOrgId("");
+                    setOrg({});
                 }
             })
             .catch(error => {
                 toast(error.data.message);
             });
         }else{
-            api.postMethod("/api/user", user)
+            api.postMethod("/api/organization", org)
             .then(response => {
                 if (response.data.status == 201 ) {
                     toast(response.data.message);
-                    setUserList((prev) => [
+                    setOrgList((prev) => [
                         ...prev, response.data.data]);
-                    SetAddUser(false);
+                    SetAddOrg(false);
                 }else{
                     toast(response.data.message);
 
@@ -96,14 +108,14 @@ console.log(error);
         }
     };
 
-    const removeList = (userId,index) =>{
-        api.DeleteMethod("/api/user", userId)
+    const removeList = (orgId,index) =>{
+        api.DeleteMethod("/api/organization", orgId)
         .then(response => {
             if (response.data.status == 200) {
                 toast(response.data.message);
-                const userListData = [...userList];
+                const userListData = [...orgList];
                 userListData.splice(index, 1)
-                setUserList(userListData)
+                setOrgList(userListData)
             }
         })
         .catch(error => {
@@ -112,33 +124,37 @@ console.log(error);
     }
 
     const handleEditList = (id,data) =>{
-        SetAddUser(true);
-        setUser(data);
-        setUserId(id);
+        SetAddOrg(true);
+        setOrg(data);
+        setOrgId(id);
     }
 
     return (
         <>
             <ToastContainer />
             <div className="App p-4">
-                <Button variant="success" onClick={handleAddUser}>
-                    Add New User      </Button>
-                <Modal show={addUser} onHide={handleCloseUser}>
+                <Button variant="success" onClick={handleAddOrg}>
+                    Add New Organization      </Button>
+                <Modal show={addOrg} onHide={handleCloseOrg}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Add New User</Modal.Title>
+                        <Modal.Title>Add New Organization</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <Form.Group className="mb-3" onSubmit={handleSubmit}>
                             <Form.Label>Name</Form.Label>
-                            <Form.Control type="text" name="username" id="username" value={user.username} onChange={(e) => handleChange(e)} placeholder="Enter Name" />
+                            <Form.Control type="text" name="name" id="name" value={org.name} onChange={(e) => handleChange(e)} placeholder="Enter Name" />
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Email</Form.Label>
-                            <Form.Control type="email" name="email" id="email" value={user.email} onChange={(e) => handleChange(e)} placeholder=" Enter Email" />
+                            <Form.Control type="email" name="email" id="email" value={org.email} onChange={(e) => handleChange(e)} placeholder=" Enter Email" />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Address</Form.Label>
+                            <Form.Control type="text" name="address" id="address" value={org.address} onChange={(e) => handleChange(e)} placeholder=" Enter Address" />
                         </Form.Group>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="secondary" onClick={handleCloseUser}>Cancel</Button>
+                        <Button variant="secondary" onClick={handleCloseOrg}>Cancel</Button>
                         <Button variant="primary" type="submit" onClick={handleSubmit}>Save</Button>
                     </Modal.Footer>
                 </Modal>
@@ -153,15 +169,17 @@ console.log(error);
                                         <th>#</th>
                                         <th>Name</th>
                                         <th>Email</th>
+                                        <th>Address</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {userList.map((data, index) => (
+                                    {orgList.map((data, index) => (
                                         <tr key={index}>
                                             <td>{index + 1}</td>
-                                            <td>{data.username}</td>
+                                            <td>{data.name}</td>
                                             <td>{data.email}</td>
+                                            <td>{data.address}</td>
                                             <td> 
                                                 <button type="button" className='btn btn-primary mr-3' onClick={(event) => handleEditList(data._id, data)}>Edit</button>
                                                 <button type="button" className='btn btn-danger' onClick={() => removeList(data._id,data.index)}>Delete</button>

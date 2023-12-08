@@ -3,6 +3,7 @@ import {  Form, Button, Modal } from 'react-bootstrap';
 import api from "./../../Environment";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { BrowserRouter as Router, Routes, Route, Outlet, Navigate } from 'react-router-dom';
 
 function User() {
 
@@ -19,9 +20,15 @@ function User() {
     useEffect(()=>{
         SetCheckUser('');
         let user =  JSON.parse(localStorage.getItem('user'));
-        SetCheckUser(user);
+        if(user){
+            SetCheckUser(user);
+        }else{
+            window.location = '/';
+        }
 
     },[]);
+
+
 
     useEffect(() => {
         api.getMethod("/api/user?page=" + currentPage + "&limit=" + limit)
@@ -129,8 +136,8 @@ console.log(error);
         <>
             <ToastContainer />
             <div className="App p-4">
-             {checkUser.role == 'admin'  ?  <Button variant="success" onClick={handleAddUser}>
-                    Add New User      </Button> : '' }
+           {checkUser ?  (checkUser.role == 'admin'  ?  <Button variant="success" onClick={handleAddUser}>
+                    Add New User      </Button> : '' ) : ''}
                 <Modal show={addUser} onHide={handleCloseUser}>
                     <Modal.Header closeButton>
                         <Modal.Title>Add New User</Modal.Title>
@@ -172,12 +179,12 @@ console.log(error);
                                             <td>{data.username}</td>
                                             <td>{data.email}</td>
                                             <td> 
-                                                {checkUser.role == "admin" ? (
+                                                { checkUser ? (checkUser.role == "admin" ? (
                                                     <div>
                                                 <button type="button" className='btn btn-primary mr-3' onClick={(event) => handleEditList(data._id, data)}>Edit</button>
                                                 <button type="button" className='btn btn-danger' onClick={() => removeList(data._id,data.index)}>Delete</button>
                                               </div>
-                                                ): ''}
+                                                ): '' ) : ''}
                                             </td>
                                         </tr>
                                     ))}

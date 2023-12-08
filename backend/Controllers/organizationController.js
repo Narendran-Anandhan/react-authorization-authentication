@@ -4,8 +4,9 @@ const Organization = require("../Models/organization");
 
 exports.createOrganization = async (req, res) => {
     const org = new Organization({
-        username: req.body.username,
+        name: req.body.name,
         email: req.body.email,
+        address: req.body.address
     });
     try {
         await org.save();
@@ -60,20 +61,25 @@ exports.updateOrganization = async (req, res) => {
     const id = req.params.userId;
     try {
         const id = req.params.userId;
-        const username = req.body.username;
+        const name = req.body.name;
         const email = req.body.email;
+        const address = req.body.address;
+
         const org = await Organization.findById(id);
         if (!org) {
             return res.status(500).send({
                 status: 500,
-                message: `user not found with id ${id}`,
+                message: `organization not found with id ${id}`,
             });
         }
-        if (username) {
-            user.username = username;
+        if (name) {
+            org.name = name;
         }
         if (email) {
-            user.email = email;
+            org.email = email;
+        }
+        if (address) {
+            org.address = address;
         }
         org.save();
         res.status(200).send({

@@ -14,6 +14,11 @@ var organizationSchema = new mongoose.Schema(
       trim: true,
       required: [true, "Email is required"],
     },
+    address: {
+      type: String,
+      trim: true,
+      required: [true, "Address is required"],
+    },
   },
   { timestamps: true }
 );
